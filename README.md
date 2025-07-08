@@ -7,7 +7,6 @@ Whether you're a student managing assignments or a developer tracking feature up
 ✅ Adding, completing, and deleting tasks  
 ✅ Due date and time scheduling with conflict checks  
 ✅ Colorful theme and mode switching (Light/Dark)  
-✅ Flash feedback for better interaction  
 All this with a backend powered by plain JSON – no database setup required!
 
 TaskMate is perfect for learning web development with Flask, or as a base for building more advanced productivity tools.
