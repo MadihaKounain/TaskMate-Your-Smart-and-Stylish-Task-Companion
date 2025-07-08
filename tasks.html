@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="{{ theme }}-{{ mode }}">
+    <div class="navbar">
+        <div>
+            <strong>Task Manager</strong>
+        </div>
+        <div class="theme-switcher">
+            <form method="GET" action="{{ url_for('change_theme') }}">
+                <label for="theme-select">Theme:</label>
+                <select id="theme-select" name="theme" onchange="this.form.submit()">
+                    <option value="blue" {% if theme == 'blue' %}selected{% endif %}>Blue</option>
+                    <option value="green" {% if theme == 'green' %}selected{% endif %}>Green</option>
+                    <option value="red" {% if theme == 'red' %}selected{% endif %}>Red</option>
+                    <option value="purple" {% if theme == 'purple' %}selected{% endif %}>Purple</option>
+                </select>
+
+                <label for="mode-select">Mode:</label>
+                <select id="mode-select" name="mode" onchange="this.form.submit()">
+                    <option value="light" {% if mode == 'light' %}selected{% endif %}>Light</option>
+                    <option value="dark" {% if mode == 'dark' %}selected{% endif %}>Dark</option>
+                </select>
+            </form>
+        </div>
+        <div>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+
+    <main>
+        <h1>Welcome, {{ session['username'] }}</h1>
+
+        <form method="POST" action="{{ url_for('tasks') }}" class="task-form">
+            <h3>Add New Task</h3>
+            <input type="text" name="title" placeholder="Task Title" required>
+            <select name="priority" required>
+                <option value="" disabled selected>Priority</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+            <select name="difficulty" required>
+                <option value="" disabled selected>Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <input type="date" name="due_date" required>
+            <input type="time" name="due_time" required> <!-- New time input -->
+            <button type="submit">Add Task</button>
+        </form>
+
+        <div class="task-list">
+            <h2>Your Tasks</h2>
+            <ul>
+                {% for task in tasks %}
+                <li>
+                    <div>
+                        <strong>{{ task.title }}</strong>
+                        - Priority: {{ task.priority }}
+                        - Difficulty: {{ task.difficulty }}
+                        - Due: {{ task.due_date }} at {{ task.due_time }}
+                        - Status:
+                        {% if task.completed %}
+                            <span style="color: green;">Completed</span>
+                        {% else %}
+                            <span style="color: red;">Pending</span>
+                        {% endif %}
+                    </div>
+                    <div class="actions">
+                        <a href="{{ url_for('complete_task', task_id=loop.index0) }}">
+                            {% if task.completed %} Mark as Pending {% else %} Mark as Done {% endif %}
+                        </a>
+                        <a href="{{ url_for('delete_task', task_id=loop.index0) }}" style="background: red;">Delete</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; {{ session['username'] }}'s Task Manager</p>
+    </footer>
+</body>
+</html>

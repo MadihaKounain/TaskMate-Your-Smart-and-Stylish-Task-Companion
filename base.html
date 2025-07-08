@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+
+
+<body class="light-mode blue-theme">
+
+    <!-- HEADER SECTION -->
+    <header class="main-header">
+        <div class="container header-container">
+            <h1 class="site-title">Task Manager</h1>
+            <div class="user-info">
+                <p>Welcome, {{ session.get('username', 'Guest') }}!</p>
+                {% if session.get('username') %}
+                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-login">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION & THEME CONTROLS -->
+    <nav class="theme-nav">
+        <div class="container theme-container">
+            <button onclick="toggleTheme()" class="btn btn-theme-toggle">Toggle Dark Mode</button>
+            <div class="theme-selector">
+                <label for="theme-color">Select Theme Color:</label>
+                <select id="theme-color" onchange="changeThemeColor(event)" class="theme-select">
+                    <option value="blue-theme">Blue</option>
+                    <option value="green-theme">Green</option>
+                    <option value="red-theme">Red</option>
+                    <option value="purple-theme">Purple</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content container">
+        {% block content %}{% endblock %}
+    </main>
+<script>
+    // Toggle Dark/Light Mode
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+    }
+
+    // Change Theme Color
+    function changeThemeColor(event) {
+        const selectedTheme = event.target.value;
+        document.body.classList.remove('blue-theme', 'green-theme', 'red-theme', 'purple-theme');
+        document.body.classList.add(selectedTheme);
+    }
+</script>
+
+
+<div class="theme-toggle-section">
+  <select id="theme-selector">
+    <option value="blue-theme">Blue</option>
+    <option value="green-theme">Green</option>
+    <option value="red-theme">Red</option>
+    <option value="purple-theme">Purple</option>
+  </select>
+</div>
+
+<div class="task-form-section">
+  <input type="text" id="new-task-input" placeholder="Task Title">
+  <input type="time" id="new-task-time">
+  <button id="add-task-button">Add Task</button>
+</div>
+
+<div class="task-list-section">
+  <ul id="task-list"></ul>
+</div>
+<div class="main-container">
+  <!-- Login Card -->
+  <div class="card">
+    <h2>Login</h2>
+    <form action="#" method="POST">
+      <input type="email" placeholder="Enter your email" required>
+      <input type="password" placeholder="Enter your password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="form-link">Don't have an account? <span onclick="toggleForm()">Sign Up</span></div>
+  </div>
+
+  <!-- Registration Card -->
+  <div class="card">
+    <h2>Register</h2>
+    <form action="#" method="POST">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Enter your email" required>
+      <input type="password" placeholder="Create a password" required>
+      <button type="submit">Register</button>
+    </form>
+    <div class="form-link">Already have an account? <span onclick="toggleForm()">Login</span></div>
+  </div>
+</div>
+
+
+<footer>
+  © Task Manager App - 2024
+</footer>
+
+
+</body>
+
+
+
+</html>
+
+
+
+
